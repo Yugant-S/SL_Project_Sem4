@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- Sky Blue Background Section -->
+    <View
+        android:id="@+id/topBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/top_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/budgetSection" />
+
+    <!-- Profile and Notifications -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/profile_placeholder"
+            android:background="@drawable/circle_bg"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hi User"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_toEndOf="@id/profileImage"
+            android:layout_marginStart="12dp"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/notifications"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_notifications"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+    <!-- Budget Progress -->
+    <LinearLayout
+        android:id="@+id/budgetSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:padding="16dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="-10dp">
+
+        <!-- Moved Monthly Budget Higher -->
+        <TextView
+            android:id="@+id/budgetTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly Budget"
+            android:textSize="18sp"
+
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp"/> <!-- Reduced space below -->
+
+        <TextView
+            android:id="@+id/budgetAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₹25,000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"/> <!-- Reduced space below -->
+
+
+        <!-- Progress Bar and Percentage (Below Budget Info) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ProgressBar
+                android:id="@+id/budgetProgressBar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="10dp"
+                android:max="100"
+                android:progress="50"
+                android:indeterminate="false"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:progressDrawable="@drawable/progress_bar_style" />
+
+            <TextView
+                android:id="@+id/budgetPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50%"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/budgetSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/incomeIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_income"
+                android:background="@drawable/rounded_icon_bg"
+                app:shapeAppearanceOverlay="@style/RoundedImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/incomeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/incomeIcon"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/incomeAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹50,000"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/incomeLabel"
+                app:layout_constraintTop_toBottomOf="@id/incomeLabel"/>
+
+            <ImageView
+                android:id="@+id/expenseIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_expense"
+                android:background="@drawable/rounded_icon_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/incomeIcon" />
+
+            <TextView
+                android:id="@+id/expenseLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expenses"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/expenseIcon"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/expenseAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹10,000"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/expenseIcon"
+                app:layout_constraintTop_toBottomOf="@id/expenseLabel"
+                android:layout_marginEnd="8dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <!-- Analytics Section -->
+    <LinearLayout
+        android:id="@+id/analyticsSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/budgetSection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/analyticsTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Analytics"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/analyticsShowMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show More"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:clickable="true"/>
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/expensePieChart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+    <!-- Transactions Section -->
+    <LinearLayout
+        android:id="@+id/transactionsSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/analyticsSection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/transactionsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transactions"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/transactionsShowMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show More"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:clickable="true"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recentTransactionsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="80dp"
+            android:nestedScrollingEnabled="true" />
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#2196F3"
+        android:elevation="1dp"
+        android:src="@drawable/ic_add"
+        app:itemIconTint="@color/nav_icon_color"
+        app:itemTextColor="@color/nav_icon_color"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        app:itemTextColor="#2196F3"
+        app:itemBackground="@drawable/nav_item_background"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_nav_background"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconSize="24dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
