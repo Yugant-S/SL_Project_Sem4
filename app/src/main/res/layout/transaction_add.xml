@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:background="@android:color/white">
+
+    <!-- Your existing layout goes here (all inside a LinearLayout) -->
+    <!-- Replace your root LinearLayout with this inner one inside ScrollView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add New Transactions"
+            android:textSize="18sp"
+            android:layout_margin="20dp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="10dp">
+
+            <Button
+                android:id="@+id/btnIncome"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Income"
+                android:textColor="@color/grey"
+                android:background="@android:color/transparent"
+                android:minHeight="48dp"
+                android:padding="12dp"/>
+
+            <Button
+                android:id="@+id/btnExpense"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Expense"
+                android:textColor="@color/red"
+                android:background="@android:color/transparent"
+                android:minHeight="48dp"
+                android:padding="12dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/editAmount"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="₹ Amount"
+            android:textSize="16sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:inputType="numberDecimal"
+            android:background="@drawable/edittext_border"
+            android:padding="12dp"
+            android:elevation="3dp"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="10dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/black"/>
+
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edittext_border"
+            android:padding="12dp"
+            android:elevation="3dp"
+            android:textColor="@color/black"
+            android:minHeight="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Method"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/black"/>
+
+        <Spinner
+            android:id="@+id/spinnerAccount"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edittext_border"
+            android:padding="12dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/black"
+            android:elevation="3dp"
+            android:minHeight="48dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Enter Description"
+            android:textSize="16sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/edittext_border"
+            android:padding="12dp"
+            android:elevation="3dp"
+            android:textColor="@color/black"
+            android:minHeight="48dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Date and Time"
+            android:paddingBottom="4dp"
+            android:textColor="@color/black"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Select Date and Time"
+            android:textColor="@android:color/white"
+            android:background="@drawable/blue_btn"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:layout_marginBottom="10dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Save Transaction"
+            android:textColor="@android:color/white"
+            android:background="@drawable/blue_btn"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+</ScrollView>
+
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:background="@drawable/bottom_nav_background"
+    app:menu="@menu/bottom_nav_menu"
+    app:itemTextColor="#2196F3"
+    app:itemIconSize="24dp"
+    app:itemBackground="@drawable/nav_item_background"
+    app:labelVisibilityMode="labeled" />
+</LinearLayout>
