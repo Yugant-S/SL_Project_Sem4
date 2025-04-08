@@ -22,7 +22,7 @@
         android:id="@+id/mainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Track your finanaces"
+        android:text="Track your Expenses"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#5350B2"

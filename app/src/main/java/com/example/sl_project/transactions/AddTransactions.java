@@ -37,12 +37,12 @@ public class AddTransactions extends AppCompatActivity {
     private BottomNavigationView bottomNav;
 
     // Transaction data
-    private String transactionType = "Expense"; // Default type
+    private String transactionType = "Expense";
     private Calendar selectedDateTime = Calendar.getInstance();
 
     // Category arrays
-    private String[] incomeCategories = {"Salary", "Freelance", "Investment", "Gift", "Other"};
-    private String[] expenseCategories = {"Food", "Transportation", "Housing", "Shopping", "Other"};
+    private String[] incomeCategories = {"Salary", "Freelance", "Gift", "Other"};
+    private String[] expenseCategories = {"Food", "Travel", "Rent", "Shopping", "Other"};
     private String[] paymentMethods = {"Cash", "Debit Card", "Credit Card", "UPI", "Other"};
 
     // Database helper
@@ -110,7 +110,6 @@ public class AddTransactions extends AppCompatActivity {
             String category = intent.getStringExtra("TRANSACTION_CATEGORY");
             String paymentMethod = intent.getStringExtra("TRANSACTION_PAYMENT_METHOD");
 
-            // Set spinner selections after a short delay to ensure adapters are ready
             spinnerAccount.post(new Runnable() {
                 @Override
                 public void run() {
@@ -133,7 +132,6 @@ public class AddTransactions extends AppCompatActivity {
                 }
             });
 
-            // Update button text
             btnSave.setText("Update Transaction");
         }
     }

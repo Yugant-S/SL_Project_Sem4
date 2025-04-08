@@ -1,6 +1,8 @@
 package com.example.sl_project.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -72,6 +74,11 @@ public class HomeActivity extends AppCompatActivity {
 
         // Set up Pie Chart
         setupPieChart();
+
+        // Set up budget with SharedPreferences
+        setupBudgetWithSharedPreferences();
+
+        // Update progress bar
         updateProgressBar();
 
         // Handle "Show More" click events
@@ -80,10 +87,32 @@ public class HomeActivity extends AppCompatActivity {
 
         // Set up Bottom Navigation
         setupBottomNavigation();
+    }
+    private void updateIncomeAndExpense() {
+        double totalIncome = dbHelper.getTotalIncome();
+        double totalExpenses = dbHelper.getTotalExpenses();
 
+        incomeAmount.setText(String.format("₹%.2f", totalIncome));
+        expenseAmount.setText(String.format("₹%.2f", totalExpenses));
+    }
+
+    private void setupBudgetWithSharedPreferences() {
+        // Get SharedPreferences for storing budget
+        SharedPreferences budgetPrefs = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+
+        // Retrieve saved budget amount (default to empty string if not found)
+        String savedBudget = budgetPrefs.getString("budgetAmount", "");
+
+        // Set the budget EditText with saved value if it exists
+        if (!savedBudget.isEmpty()) {
+            budgetAmount.setText(savedBudget);
+        }
+
+        // Add Text Change Listener to save budget changes
         budgetAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed
             }
 
             @Override
@@ -95,6 +124,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String budgetText = s.toString();
+                // Save the budget amount to SharedPreferences
+                SharedPreferences.Editor editor = budgetPrefs.edit();
+                editor.putString("budgetAmount", budgetText);
+                editor.apply();
+
                 double budget = 0;
 
                 if (budgetText.isEmpty()) {
@@ -127,13 +161,6 @@ public class HomeActivity extends AppCompatActivity {
                 updateProgressBar();
             }
         });
-    }
-    private void updateIncomeAndExpense() {
-        double totalIncome = dbHelper.getTotalIncome();
-        double totalExpenses = dbHelper.getTotalExpenses();
-
-        incomeAmount.setText(String.format("₹%.2f", totalIncome));
-        expenseAmount.setText(String.format("₹%.2f", totalExpenses));
     }
 
     private List<HomeTransaction> fetchAllTransactions() {
@@ -243,13 +270,13 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
     private void showAnalyticsDetails() {
-        //Intent intent = new Intent(this, AnalyticsActivity.class);
-        //startActivity(intent);
+        Intent stats = new Intent(this, StatisticsActivity.class);
+        startActivity(stats);
     }
 
     private void showTransactionsList() {
-            //Intent intent = new Intent(this, TransactionsActivity.class);
-            //startActivity(intent);
+            Intent transactions = new Intent(this, TransactionListActivity.class);
+            startActivity(transactions);
     }
 
     private void updateProgressBar() {

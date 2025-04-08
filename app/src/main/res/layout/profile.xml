@@ -63,6 +63,7 @@
             android:id="@+id/profileContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittext_border"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingTop="24dp"
@@ -82,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Naveena"
+                android:text="Vansh"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -92,10 +93,10 @@
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="naveena@example.com"
+                android:layout_marginTop="4dp"
+                android:text="vansh@example.com"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

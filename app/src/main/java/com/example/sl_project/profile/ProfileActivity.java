@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
@@ -22,7 +24,6 @@ import com.example.sl_project.stats.StatisticsActivity;
 import com.example.sl_project.transactions.AddTransactions;
 import com.example.sl_project.transactions.TransactionListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -32,10 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView backButton;
     private CircleImageView profileImage;
     private TextView username, email;
-    private LinearLayout personalInfoLayout, changePasswordLayout, settingsLayout, inviteLayout;
+    private LinearLayout personalInfoLayout, changePasswordLayout, inviteLayout;
     private LinearLayout contactUsLayout, logoutLayout;
-    private BottomNavigationView bottomNavigation;
-    private FloatingActionButton fabAddTransaction;
     private BottomNavigationView bottomNav;
 
 
@@ -59,7 +58,6 @@ public class ProfileActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         personalInfoLayout = findViewById(R.id.personalInfoItem);
         changePasswordLayout = findViewById(R.id.changePasswordItem);
-        settingsLayout = findViewById(R.id.settingsItem);
         inviteLayout = findViewById(R.id.inviteFriendsItem);
         contactUsLayout = findViewById(R.id.contactUsItem);
         logoutLayout = findViewById(R.id.logOutItem);
@@ -71,22 +69,43 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        // Load user profile image using Glide
-        // Replace "profileImageUrl" with the actual URL from your user data
-        String profileImageUrl = "https://example.com/profile_image.jpg";
+        // Get SharedPreferences for login data
+        SharedPreferences loginPrefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
 
-        // Example with placeholder and error images
-        Glide.with(this)
-                .load(profileImageUrl)
-                .apply(new RequestOptions()
-                        .placeholder(R.drawable.profile_placeholder)
-                        .error(R.drawable.profile_placeholder))
-                .into(profileImage);
+        // Get SharedPreferences for profile-specific data
+        SharedPreferences profilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE);
 
-        // Set username from user data
-        // Replace with actual username from your user data
-        username.setText("Naveena");
-        email.setText("naveena@example.com");
+        // Get user data from SharedPreferences
+        String userEmail = loginPrefs.getString("userEmail", "email@example.com");
+        String userName = loginPrefs.getString("userName", "User");
+
+        // Get profile image URI from profile preferences
+        String profileImageUri = profilePrefs.getString("profileImageUri", null);
+
+        // Load profile image from URI if available, otherwise use placeholder
+        if (profileImageUri != null) {
+            try {
+                // Try to load from URI using Glide
+                Glide.with(this)
+                        .load(Uri.parse(profileImageUri))
+                        .apply(new RequestOptions()
+                                .placeholder(R.drawable.profile_placeholder)
+                                .error(R.drawable.profile_placeholder))
+                        .into(profileImage);
+            } catch (Exception e) {
+                // Fallback to placeholder if URI is invalid
+                profileImage.setImageResource(R.drawable.profile_placeholder);
+            }
+        } else {
+            // No saved image URI, use placeholder
+            Glide.with(this)
+                    .load(R.drawable.profile_placeholder)
+                    .into(profileImage);
+        }
+
+        // Set username and email from SharedPreferences
+        username.setText(userName);
+        email.setText(userEmail);
     }
 
     private void setupClickListeners() {
@@ -99,12 +118,6 @@ public class ProfileActivity extends AppCompatActivity {
         // Change password
         changePasswordLayout.setOnClickListener(v -> showChangePasswordDialog());
 
-        // Settings
-//        settingsLayout.setOnClickListener(v -> {
-//            Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
-//            startActivity(intent);
-//        });
-
         // Invite Friends
         inviteLayout.setOnClickListener(v -> shareInvite());
 
@@ -113,11 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Logout
         logoutLayout.setOnClickListener(v -> logout());
-
-        fabAddTransaction.setOnClickListener(v -> {
-            // Open add transaction activity
-            // startActivity(new Intent(StatisticsActivity.this, AddTransactionActivity.class));
-        });
     }
 
     private void showChangePasswordDialog() {
@@ -164,6 +172,8 @@ public class ProfileActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    LoginActivity.clearLoginState(this);
+
                     Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
 
                     // Redirect to login
@@ -204,9 +214,6 @@ public class ProfileActivity extends AppCompatActivity {
             } else {
                 return false; // Unknown item
             }
-
-            //startActivity(intent); // Start the activity
-            //return true;
         });
     }
 }

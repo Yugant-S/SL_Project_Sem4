@@ -1,5 +1,7 @@
 package com.example.sl_project.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,12 +21,30 @@ public class LoginActivity extends AppCompatActivity {
     EditText emailInput, passwordInput;
     UserDatabaseHelper dbHelper;
 
+    // SharedPreferences constants
+    private static final String PREF_NAME = "LoginPrefs";
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_USER_EMAIL = "userEmail";
+    private SharedPreferences sharedPreferences;
+
     boolean isEmailValid = false;
     boolean isPasswordValid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+        // Check if user is already logged in
+        if (sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)) {
+            // User is already logged in, redirect to HomeActivity
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish(); // Close this activity so user can't go back to login
+            return; // Exit the method early
+        }
+
         setContentView(R.layout.login);
 
         dbHelper = new UserDatabaseHelper(this); // Initialize DB
@@ -80,9 +100,12 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 boolean loginSuccess = dbHelper.validateLogin(email, password);
                 if (loginSuccess) {
+                    // Save login state in SharedPreferences
+                    saveLoginState(email);
+
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                     finish();
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
                 }
@@ -92,5 +115,21 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirect.setOnClickListener(view -> {
             startActivity(new Intent(LoginActivity.this, SignupActivity.class));
         });
+    }
+
+    // Method to save login state
+    private void saveLoginState(String email) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.putString(KEY_USER_EMAIL, email);
+        editor.apply(); // Apply changes asynchronously
+    }
+
+    // Optional: Method to clear login state (for logout functionality)
+    public static void clearLoginState(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

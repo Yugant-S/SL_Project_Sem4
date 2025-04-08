@@ -179,6 +179,7 @@ public class TransactionListActivity extends AppCompatActivity implements Transa
                 return true;
             } else if (itemId == R.id.nav_transactions) {
                 startActivity(allTransactions);
+                //bottomNav.setSelectedItemId(R.id.nav_transactions);
                 return true;
             } else if (itemId == R.id.nav_statistics) {
                 startActivity(stats);

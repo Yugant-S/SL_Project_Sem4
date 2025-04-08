@@ -1,6 +1,8 @@
 package com.example.sl_project.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,11 +22,30 @@ public class SignupActivity extends AppCompatActivity {
     TextView loginRedirect;
     UserDatabaseHelper dbHelper;
 
+    // SharedPreferences constants
+    private static final String PREF_NAME = "LoginPrefs";
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_USER_EMAIL = "userEmail";
+    private static final String KEY_USER_NAME = "userName";
+    private SharedPreferences sharedPreferences;
+
     boolean isNameValid = false, isEmailValid = false, isPasswordValid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+        // Check if user is already logged in
+        if (sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)) {
+            // User is already logged in, redirect to HomeActivity
+            startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+            finish(); // Close this activity so user can't go back to signup
+            return; // Exit the method early
+        }
+
         setContentView(R.layout.signup);
 
         dbHelper = new UserDatabaseHelper(this); // Initialize DB
@@ -104,6 +125,9 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     boolean success = dbHelper.insertUser(name, email, password);
                     if (success) {
+                        // Save login state in SharedPreferences
+                        saveLoginState(name, email);
+
                         Toast.makeText(this, "Signup Successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                         finish();
@@ -117,5 +141,22 @@ public class SignupActivity extends AppCompatActivity {
         loginRedirect.setOnClickListener(view ->
                 startActivity(new Intent(SignupActivity.this, LoginActivity.class))
         );
+    }
+
+    // Method to save login state
+    private void saveLoginState(String name, String email) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.putString(KEY_USER_EMAIL, email);
+        editor.putString(KEY_USER_NAME, name); // Also store the user's name
+        editor.apply(); // Apply changes asynchronously
+    }
+
+    // Optional: Method to clear login state (for logout functionality)
+    public static void clearLoginState(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

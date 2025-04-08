@@ -32,8 +32,6 @@ public class StatisticsActivity extends AppCompatActivity {
     private View timeFilterIndicator;
     private DonutChartView donutChart;
     private TextView chartMonth, chartAmount;
-    private BottomNavigationView bottomNavigation;
-    private FloatingActionButton fabAddTransaction;
     private ImageView backButton;
     private BottomNavigationView bottomNav;
     private BarChart barChart;
@@ -113,11 +111,6 @@ public class StatisticsActivity extends AppCompatActivity {
         filterWeekly.setOnClickListener(timeFilterClickListener);
         filterMonthly.setOnClickListener(timeFilterClickListener);
         filterYearly.setOnClickListener(timeFilterClickListener);
-
-        fabAddTransaction.setOnClickListener(v -> {
-            // Open add transaction activity
-            // startActivity(new Intent(StatisticsActivity.this, AddTransactionActivity.class));
-        });
 
         timeFilterIndicator.post(() -> {
             int indicatorWidth = timeFilterIndicator.getWidth();

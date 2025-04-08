@@ -2,6 +2,7 @@ package com.example.sl_project.profile;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,14 @@ public class PersonalInfoActivity extends AppCompatActivity {
     private ImageView backButton;
     private TextView editPicture;
 
-    private SharedPreferences sharedPreferences;
+    // Consistent SharedPreferences keys
+    private static final String PREF_NAME = "LoginPrefs";
+    private static final String KEY_USER_EMAIL = "userEmail";
+    private static final String KEY_USER_NAME = "userName";
+    private static final String PROFILE_PREF_NAME = "UserProfile"; // For profile-specific data
+
+    private SharedPreferences loginPrefs;
+    private SharedPreferences profilePrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +51,9 @@ public class PersonalInfoActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         editPicture = findViewById(R.id.editPicture);
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("UserProfile", MODE_PRIVATE);
+        // Initialize both SharedPreferences - one for login and one for profile details
+        loginPrefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        profilePrefs = getSharedPreferences(PROFILE_PREF_NAME, MODE_PRIVATE);
 
         // Load existing user data
         loadUserInfo();
@@ -72,8 +81,8 @@ public class PersonalInfoActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
             profileImage.setImageURI(imageUri);
 
-            // Save image URI to SharedPreferences
-            sharedPreferences.edit().putString("profileImageUri", imageUri.toString()).apply();
+            // Save image URI to profile SharedPreferences
+            profilePrefs.edit().putString("profileImageUri", imageUri.toString()).apply();
         }
     }
 
@@ -85,29 +94,54 @@ public class PersonalInfoActivity extends AppCompatActivity {
         if (name.isEmpty() || email.isEmpty() || location.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         } else {
-            // Save user data to SharedPreferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("name", name);
-            editor.putString("email", email);
-            editor.putString("location", location);
-            editor.apply();
+            // Save user data to both SharedPreferences
+
+            // Update login SharedPreferences
+            SharedPreferences.Editor loginEditor = loginPrefs.edit();
+            loginEditor.putString(KEY_USER_NAME, name);
+            loginEditor.putString(KEY_USER_EMAIL, email);
+            loginEditor.apply();
+
+            // Update profile SharedPreferences
+            SharedPreferences.Editor profileEditor = profilePrefs.edit();
+            profileEditor.putString("name", name);
+            profileEditor.putString("email", email);
+            profileEditor.putString("location", location);
+            profileEditor.apply();
 
             Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void loadUserInfo() {
-        String name = sharedPreferences.getString("name", "Naveena J");
-        String email = sharedPreferences.getString("email", "naveena@gmail.com");
-        String location = sharedPreferences.getString("location", "United States");
-        String profileImageUri = sharedPreferences.getString("profileImageUri", null);
+        // First try to get name and email from login preferences
+        String name = loginPrefs.getString(KEY_USER_NAME, "");
+        String email = loginPrefs.getString(KEY_USER_EMAIL, "");
+
+        // If not found in login prefs, try profile prefs
+        if (name.isEmpty()) {
+            name = profilePrefs.getString("name", "User");
+        }
+
+        if (email.isEmpty()) {
+            email = profilePrefs.getString("email", "user@example.com");
+        }
+
+        // Get location and image from profile prefs
+        String location = profilePrefs.getString("location", "United States");
+        String profileImageUri = profilePrefs.getString("profileImageUri", null);
 
         etName.setText(name);
         etEmail.setText(email);
         etLocation.setText(location);
 
         if (profileImageUri != null) {
-            profileImage.setImageURI(Uri.parse(profileImageUri));
+            try {
+                profileImage.setImageURI(Uri.parse(profileImageUri));
+            } catch (Exception e) {
+                // In case the saved URI is no longer valid
+                profileImage.setImageResource(R.drawable.profile_placeholder);
+            }
         }
     }
 }
